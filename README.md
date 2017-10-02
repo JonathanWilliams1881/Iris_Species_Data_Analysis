@@ -70,6 +70,9 @@ Quick.BoxPL <- boxplot(setosa.df$Petal.Length,
                        main = "Boxplot of Petal Length",
                        col = c("red", "yellow", "blue"))
 
+
+![](Plot_1.png)
+
 From these graphs, there is an indication that the Petal Lengths of the setosa flower may be different from the petal lengths of versicolor and virginica.
 Let's gather better descriptive statistics about Petal Length of each species
 var.stats.list.pl <- list(Setosa = list(c(Min = min(setosa.df$Petal.Length),

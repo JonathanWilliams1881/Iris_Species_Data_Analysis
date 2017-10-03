@@ -5,6 +5,7 @@ Iris Species Data Analysis
 Jonathan Williams
 July 8, 2017
 This is my first Markdown Document
+
 ```r
 data("iris")
 View(iris)
@@ -38,10 +39,9 @@ my.summary
 ## 
 ```
 
-#### We want to be able to differentiate the species based upon some defining characteristics 
-#### Petal Length has the greatest overall variability so let's begin by separating dataframes by species
-#### We need a factor that has unique characteristics for each species in order to distinguish the flower type 
-#### Let's check if the Petal Lengths seem distinguishable by species
+We want to be able to differentiate the species based upon some defining characteristics. Petal Length has the greatest overall variability, so let's begin by separating dataframes by species.
+
+We need a factor that has unique characteristics for each species in order to distinguish the flower type. Let's check if the Petal Lengths seem distinguishable by species.
 
 ```r
 setosa.df <- subset(iris, iris$Species == "setosa")
@@ -62,6 +62,8 @@ virginica.summary.pl
 ```
 
 The means of Petal Length may be different for each species. Their ranges are clearly different, So we make a dataset of petal lengths.
+
+```r
 iris.petal.length <- data.frame(iris[ ,c("Petal.Length","Species")])
 Let's make some informative plots
 par(mfrow = c(1,2))
@@ -76,12 +78,13 @@ Quick.BoxPL <- boxplot(setosa.df$Petal.Length,
                        names = c("setosa", "versicolor", "virginica"),
                        main = "Boxplot of Petal Length",
                        col = c("red", "yellow", "blue"))
-
+```
 
 ![](Plot_1.png)
 
-From these graphs, there is an indication that the Petal Lengths of the setosa flower may be different from the petal lengths of versicolor and virginica.
-Let's gather better descriptive statistics about Petal Length of each species
+From these graphs, there is an indication that the Petal Lengths of the setosa flower may be different from the petal lengths of versicolor and virginica. Let's gather better descriptive statistics about Petal Length of each species.
+
+```r
 var.stats.list.pl <- list(Setosa = list(c(Min = min(setosa.df$Petal.Length),
                                           Max = max(setosa.df$Petal.Length),
                                           Med = median(setosa.df$Petal.Length),
@@ -107,9 +110,13 @@ Petal.Length.Summary
 ## Med             1.500000                4.350000              5.5500000
 ## Mean            1.462000                4.260000              5.5520000
 ## SD              0.173664                0.469911              0.5518947
+```
+
+
 Let's continue by comparing the means of the Petal Lengths of the three flowers.
 Null Hypothesis: Mean petal lenghts of all three species of flowers is the same.
 Alternative Hypothesis: At least one of the means is different from the others
+
 ```r
 linear.model.pl <- aov(Petal.Length ~ Species, data = iris.petal.length)
 anova(linear.model.pl)
@@ -141,7 +148,9 @@ plot(TUKEY, las = 1, col = "red")
 ![](Plot_2.png)
 
 
-Updated Histogram of Petal Length
+Updated Histogram of Petal Length:
+
+```r
 HistPL <- ggplot(iris.petal.length, aes(x = Petal.Length))+
   geom_histogram(binwidth = 0.2, color = "black", aes(fill = Species))+
   geom_vline(aes(xintercept = mean(Petal.Length), color = Species), linetype = "dashed", color = "grey", size = 1)+
@@ -149,20 +158,28 @@ HistPL <- ggplot(iris.petal.length, aes(x = Petal.Length))+
   ylab("Frequency")+
   ggtitle("Histogram of Petal Length")
 HistPL
+```
 
 So far, we conclude that there is a difference among mean petal lengths for the different species of iris flowers. Thus, Petal Length is a good way to tell the flowers apart. The issue is that Petals are only visible after a flower has already blossomed. We want to predict the flower type beforehand.
+
 A logical continuation is to examine whether the sepal factors are correlated to petal length. In this way, we can use sepal findings to drive our predictions of petal lengths. Finally we can classify our flower.
-Is there a relationship between Sepal Length and
-Petal Length?
+
+Is there a relationship between Sepal Length and Petal Length?
+
+```r
 corr.matrix <- ggpairs(data = iris[1:3],
                        title = "Correlation Matrix",
                        upper = list(continuous = wrap("cor", size = 5)),
                        lower = list(continuous = "smooth")
 )
 corr.matrix
+```
 
 The Correlationg Matrix shows a strong relationship b/w Petal Length and Sepal Length (rsquare = .872). We begin by examining Sepal Length.
-Descriptive statistics about Sepal Length of each species
+
+Descriptive statistics about Sepal Length of each species:
+
+```r
 var.stats.list.sl <- list(Setosa = list(c(Min = min(setosa.df$Sepal.Length),
                                           Max = max(setosa.df$Sepal.Length),
                                           Med = median(setosa.df$Sepal.Length),
@@ -196,9 +213,12 @@ HistSL <- ggplot(data = iris, aes(x = Sepal.Length))+
   ylab("Frequency")+
   ggtitle("Histogram of Sepal Length")
 HistSL
+```
 
 Sepal Lengths for Setosa, Versicolor, and Virginica flowers appear to be normally distributed around 5cm, 5.9cm and 6.5cm, respectively.
-One-Way ANOVA of Petal Length vs Sepal Length, including Bartlett's Test
+One-Way ANOVA of Petal Length vs Sepal Length, including Bartlett's Test.
+
+```r
 linear.model.slpl <- aov(iris$Petal.Length ~ iris$Sepal.Length, data = iris)
 anova(linear.model.slpl)
 ## Analysis of Variance Table
@@ -224,8 +244,11 @@ regression <- ggplot(data = iris, aes(x = Sepal.Length, y = Petal.Length))+
   ylab("Petal Length")+
   ggtitle("Petal Length vs Sepal Length")
 regression
+```
 
 Only the head and tail of the prediciton values of Petal Length based on Sepal Length are shown below, for convenience...
+
+```r
 df <- data.frame(iris.petal.length, predict(linear.model.slpl))
 df$Sepal.Length <- iris$Sepal.Length
 df <- df[ ,c(2,4,1,3)]
@@ -248,3 +271,4 @@ tail(Prediction.df)
 ## 148 virginica          6.5          5.2      4.978371
 ## 149 virginica          6.2          5.4      4.420841
 ## 150 virginica          5.9          5.1      3.863311
+```

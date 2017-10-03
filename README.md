@@ -37,8 +37,13 @@ my.summary
 ##                 
 ## 
 ```
-We want to be able to differentiate the species based upon some defining characteristics. Petal Length has the greatest overall variability so let's begin by separating dataframes by species.
-We need a factor that has unique characteristics for each species in order to distinguish the flower type. Let's check if the Petal Lengths seem distinguishable by species.
+
+#### We want to be able to differentiate the species based upon some defining characteristics 
+#### Petal Length has the greatest overall variability so let's begin by separating dataframes by species
+#### We need a factor that has unique characteristics for each species in order to distinguish the flower type 
+#### Let's check if the Petal Lengths seem distinguishable by species
+
+```r
 setosa.df <- subset(iris, iris$Species == "setosa")
 setosa.summary.pl <- summary(setosa.df$Petal.Length)
 setosa.summary.pl
@@ -54,6 +59,8 @@ virginica.summary.pl <- summary(virginica.df$Petal.Length)
 virginica.summary.pl
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   4.500   5.100   5.550   5.552   5.875   6.900
+```
+
 The means of Petal Length may be different for each species. Their ranges are clearly different, So we make a dataset of petal lengths.
 iris.petal.length <- data.frame(iris[ ,c("Petal.Length","Species")])
 Let's make some informative plots
@@ -103,6 +110,7 @@ Petal.Length.Summary
 Let's continue by comparing the means of the Petal Lengths of the three flowers.
 Null Hypothesis: Mean petal lenghts of all three species of flowers is the same.
 Alternative Hypothesis: At least one of the means is different from the others
+```r
 linear.model.pl <- aov(Petal.Length ~ Species, data = iris.petal.length)
 anova(linear.model.pl)
 ## Analysis of Variance Table
@@ -127,6 +135,11 @@ TUKEY
 ## virginica-setosa     4.090 3.88622 4.29378     0
 ## virginica-versicolor 1.292 1.08822 1.49578     0
 plot(TUKEY, las = 1, col = "red")
+```
+
+
+![](Plot_2.png)
+
 
 Updated Histogram of Petal Length
 HistPL <- ggplot(iris.petal.length, aes(x = Petal.Length))+

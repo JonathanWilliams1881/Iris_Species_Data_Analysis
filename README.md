@@ -1,9 +1,9 @@
 # Iris_Species_Data_Analysis
 Regression Analysis of Iris Dataset
 
-Iris Species Data Analysis
 Jonathan Williams
 July 8, 2017
+
 This is my first Markdown Document
 
 ```r
@@ -39,9 +39,11 @@ my.summary
 ## 
 ```
 
-We want to be able to differentiate the species based upon some defining characteristics. Petal Length has the greatest overall variability, so let's begin by separating dataframes by species.
+#### We want to be able to differentiate the species based upon some defining characteristics. 
+Petal Length has the greatest overall variability, so let's begin by separating dataframes by species.
 
-We need a factor that has unique characteristics for each species in order to distinguish the flower type. Let's check if the Petal Lengths seem distinguishable by species.
+#### We need a factor that has unique characteristics for each species in order to distinguish the flower type. 
+Let's check if the Petal Lengths seem distinguishable by species.
 
 ```r
 setosa.df <- subset(iris, iris$Species == "setosa")
@@ -61,11 +63,13 @@ virginica.summary.pl
 ##   4.500   5.100   5.550   5.552   5.875   6.900
 ```
 
-The means of Petal Length may be different for each species. Their ranges are clearly different, So we make a dataset of petal lengths.
+> The means of Petal Length may be different for each species. Their ranges are clearly different, so we make a dataset of petal lengths.
 
 ```r
 iris.petal.length <- data.frame(iris[ ,c("Petal.Length","Species")])
+```
 Let's make some informative plots
+```r
 par(mfrow = c(1,2))
 Quick.HistPL <- hist(iris.petal.length$Petal.Length,
                      xlab = "Petal Length",
@@ -82,7 +86,9 @@ Quick.BoxPL <- boxplot(setosa.df$Petal.Length,
 
 ![](Plot_1.png)
 
-From these graphs, there is an indication that the Petal Lengths of the setosa flower may be different from the petal lengths of versicolor and virginica. Let's gather better descriptive statistics about Petal Length of each species.
+> From these graphs, there is an indication that the Petal Lengths of the setosa flower may be different from the petal lengths of versicolor and virginica. 
+
+Let's gather better descriptive statistics about Petal Length of each species.
 
 ```r
 var.stats.list.pl <- list(Setosa = list(c(Min = min(setosa.df$Petal.Length),
@@ -113,8 +119,10 @@ Petal.Length.Summary
 ```
 
 
-Let's continue by comparing the means of the Petal Lengths of the three flowers.
+#### Let's continue by comparing the means of the Petal Lengths of the three flowers.
+
 Null Hypothesis: Mean petal lenghts of all three species of flowers is the same.
+
 Alternative Hypothesis: At least one of the means is different from the others
 
 ```r
@@ -160,11 +168,14 @@ HistPL <- ggplot(iris.petal.length, aes(x = Petal.Length))+
 HistPL
 ```
 
-So far, we conclude that there is a difference among mean petal lengths for the different species of iris flowers. Thus, Petal Length is a good way to tell the flowers apart. The issue is that Petals are only visible after a flower has already blossomed. We want to predict the flower type beforehand.
+![](Plot_3.png)
 
-A logical continuation is to examine whether the sepal factors are correlated to petal length. In this way, we can use sepal findings to drive our predictions of petal lengths. Finally we can classify our flower.
 
-Is there a relationship between Sepal Length and Petal Length?
+> So far, we conclude that *there is a difference among mean petal lengths for the different species of iris flowers*. Thus, Petal Length is a good way to tell the flowers apart. The issue is that Petals are only visible after a flower has already blossomed. We want to predict the flower type beforehand.
+
+> A logical continuation is to examine whether the sepal factors are correlated to petal length. In this way, we can use sepal findings to drive our predictions of petal lengths. Finally we can classify our flower.
+
+## Is there a relationship between Sepal Length and Petal Length?
 
 ```r
 corr.matrix <- ggpairs(data = iris[1:3],
@@ -175,7 +186,10 @@ corr.matrix <- ggpairs(data = iris[1:3],
 corr.matrix
 ```
 
-The Correlationg Matrix shows a strong relationship b/w Petal Length and Sepal Length (rsquare = .872). We begin by examining Sepal Length.
+
+![](Plot_4.png)
+
+> The Correlation Matrix shows a strong linear relationship between Petal Length and Sepal Length (rsquare = .872). We begin by examining Sepal Length.
 
 Descriptive statistics about Sepal Length of each species:
 
@@ -215,7 +229,11 @@ HistSL <- ggplot(data = iris, aes(x = Sepal.Length))+
 HistSL
 ```
 
-Sepal Lengths for Setosa, Versicolor, and Virginica flowers appear to be normally distributed around 5cm, 5.9cm and 6.5cm, respectively.
+
+![](Plot_5.png)
+
+> Sepal Lengths for Setosa, Versicolor, and Virginica flowers appear to be normally distributed around 5cm, 5.9cm and 6.5cm, respectively.
+
 One-Way ANOVA of Petal Length vs Sepal Length, including Bartlett's Test.
 
 ```r
@@ -235,8 +253,11 @@ bartlett.test(list(iris$Sepal.Length, iris$Petal.Length), data = iris)
 ## 
 ## data:  list(iris$Sepal.Length, iris$Petal.Length)
 ## Bartlett's K-squared = 78.027, df = 1, p-value < 2.2e-16
-Bartlett's test detects inequality of variances, but this is OK because the sample sizes are equal. The ANOVA test is significant suggesting a relationship between Sepal Length and Petal Length.
+```
+> Bartlett's test detects inequality of variances, but this is OK because the sample sizes are equal. The ANOVA test is significant suggesting a relationship between Sepal Length and Petal Length.
+
 Linear Regression Plot of Petal Length vs Sepal Length colored by Species
+```r
 regression <- ggplot(data = iris, aes(x = Sepal.Length, y = Petal.Length))+
   geom_point(aes(color = Species, shape = Species))+
   geom_smooth(method = lm)+
@@ -245,6 +266,9 @@ regression <- ggplot(data = iris, aes(x = Sepal.Length, y = Petal.Length))+
   ggtitle("Petal Length vs Sepal Length")
 regression
 ```
+
+
+![](Plot_6.png)
 
 Only the head and tail of the prediciton values of Petal Length based on Sepal Length are shown below, for convenience...
 
